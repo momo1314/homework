@@ -6,7 +6,6 @@ if (!empty($_POST)) {
     {
         $username = addslashes($_POST['username']);
         $salt = "haha";
-        //$password = md5(md5($_POST['password']).$salt);
         $password = md5(md5($_POST['password'])+$salt);
         try 
         {
@@ -16,7 +15,7 @@ if (!empty($_POST)) {
             $sel = "select * from user where username='{$username}'";
             $find = $pdo->query($sel);
             $data = $find->fetch(PDO::FETCH_ASSOC);
-            if($data['username']){
+            if($data['username']){//if(!empty($data))
                 echo "<script>alert('用户已存在');location.href='register.php'</script>";
             }
             else{
