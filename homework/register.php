@@ -13,14 +13,22 @@ if (!empty($_POST)) {
             $config = require_once './config.php';
             $pdo = new PDO($config['dsn'], $config['user'], $config['password']);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $name = $_POST['username'];
-            $sql = "insert into user(username,password) values ('$name','$password')";
-            $exec = $pdo->query($sql);
-            if($exec){
-                echo  "<script>alert('成功');location.href='index.html'</script>";
-            }else{
-                echo  "<script>alert('失败');location.href='register.php'</script>";
-}
+            $sel = "select * from user where username='{$username}'";
+            $find = $pdo->query($sel);
+            $data = $find->fetch(PDO::FETCH_ASSOC);
+            if($data['username']){
+                echo "<script>alert('用户已存在');location.href='register.php'</script>";
+            }
+            else{
+                $name = $_POST['username'];
+                $sql = "insert into user(username,password) values ('$name','$password')";
+                $exec = $pdo->query($sql);
+                if($exec){
+                    echo  "<script>alert('成功');location.href='index.html'</script>";
+                }else{
+                    echo  "<script>alert('失败');location.href='register.php'</script>";
+                }
+            }
             
         } 
         catch (PDOException $e) 
